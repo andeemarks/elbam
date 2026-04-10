@@ -1,5 +1,7 @@
 import csv
 import logging
+
+from banking.account import Account
 logger = logging.getLogger(__name__)
 
 import banking
@@ -14,6 +16,7 @@ def test_full_transactions_happy_path():
         fieldnames = ['account_number', 'balance']
         reader = csv.DictReader(closing_balances_file, fieldnames=fieldnames, skipinitialspace=True, quoting=csv.QUOTE_NONNUMERIC)
         closing_balances = [row for row in reader]
+        expected_balances = [Account(**balance) for balance in closing_balances]
 
     with open("./mable_transactions.csv") as tx_file:
         fieldnames = ['from_account_number', 'to_account_number', 'amount']
@@ -22,4 +25,4 @@ def test_full_transactions_happy_path():
 
     updated_balances = banking.apply_transactions(opening_balances, transactions) # type: ignore
     
-    assert sorted(updated_balances, key=lambda b: b['account_number']) == sorted(closing_balances, key=lambda b: b['account_number'])
+    assert sorted(updated_balances, key=lambda b: b.account_number) == sorted(expected_balances, key=lambda b: b.account_number)
