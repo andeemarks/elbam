@@ -1,3 +1,33 @@
+from pprint import pformat
+from itertools import groupby
+from typing import List
+import logging
+logger = logging.getLogger(__name__)
 
-def apply_transactions(transactions: dict[str, str], balances: dict[str, str]) -> dict[str, str]:
-    return balances
+
+def apply_transactions(balances: List[dict[str, str]], transactions: List[dict[str, str]]) -> List[dict[str, str]]:
+    new_balances = []
+    for balance in balances:
+        new_balances.append({'account_number': balance['account_number'], 'balance': float(balance['balance'])})
+
+    for transaction in transactions:
+        from_account_number = transaction['from_account_number']
+        to_account_number = transaction['to_account_number']
+        amount = float(transaction['amount'])
+        from_account = next((b for b in balances if b.get('account_number') == from_account_number))
+        to_account = next((b for b in balances if b.get('account_number') == to_account_number))
+        new_balances.append({'account_number': from_account['account_number'], 'balance': -amount})
+        new_balances.append({'account_number': to_account['account_number'], 'balance': amount})
+
+    new_balances = sorted(new_balances, key=lambda b: b['account_number'])
+    logger.debug(pformat(new_balances))
+    combined_new_balances = []
+    for account_number, balance in groupby(new_balances, key=lambda b: b['account_number']):
+        # logger.debug(account_number)
+        # logger.debug(pformat(list(balance)))
+        total_balance = sum(b['balance'] for b in balance)
+        # logger.debug(total_balance)
+        combined_new_balances.append({'account_number': account_number, 'balance': total_balance})
+
+    logger.debug(pformat(combined_new_balances))
+    return combined_new_balances
