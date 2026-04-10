@@ -20,4 +20,4 @@ jobs:
         run: flake8 .
 
       - name: Pytest
-        run: pytest --cov --cov-fail-under=85
+        run: pytest --cov=banking --cov-fail-under=85
