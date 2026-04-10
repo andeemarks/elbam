@@ -21,10 +21,7 @@ def apply_transactions(balances: List[dict[str, str]], transactions: List[dict[s
 def aggregate_transactions_across_accounts(new_balances: List[dict[str, float]]):
     combined_new_balances: List[dict[str, float]] = []
     for account_number, balance in groupby(new_balances, key=lambda b: b['account_number']):
-        # logger.debug(account_number)
-        # logger.debug(pformat(list(balance)))
         total_balance = sum(b['balance'] for b in balance)
-        # logger.debug(total_balance)
         combined_new_balances.append({'account_number': account_number, 'balance': total_balance})
 
     return combined_new_balances
