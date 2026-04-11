@@ -1,3 +1,4 @@
+from banking.account import Account
 from banking.transaction import Transaction
 from banking.transaction_log import TransactionLog, TransactionLogEntry
 
@@ -16,7 +17,7 @@ def test_contains_log_entries():
     assert log.log[0] == log_entry
     
     log_entry = TransactionLogEntry("account2", 567.89)
-    
+
     log.add_log_entry(log_entry)
 
     assert 2 == len(log.log)
@@ -36,3 +37,16 @@ def test_recognises_credit_and_debit_transactions():
     assert expected_debit in log.log
     assert expected_credit in log.log
 
+def test_aggregates_balances_across_accounts():
+    log = TransactionLog()
+
+    log.add_log_entry(TransactionLogEntry("from", 500))
+    log.add_log_entry(TransactionLogEntry("to", 600))
+    log.add_transaction(Transaction("from", "to", 123.45))
+    log.add_transaction(Transaction("to", "from", 67.89))
+
+    result = log.aggregate()
+
+    assert 2 == len(result)
+    assert Account("from", 500 - 123.45 + 67.89) in result
+    assert Account("to", 600 + 123.45 - 67.89) in result
