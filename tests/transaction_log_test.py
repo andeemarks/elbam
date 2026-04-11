@@ -25,13 +25,14 @@ def test_contains_log_entries():
     assert 2 == len(log.log)
     assert log.log[1] == log_entry
 
-def test_recognises_credit_and_debit_transactions():
+def test_splits_transaction_into_credit_and_debit():
     log = TransactionLog()
-    transaction = Transaction("from", "to", 123.45)
 
-    log.add_transaction(transaction)
+    log.add_log_entry(TransactionLogEntry("from", 200))
+    log.add_log_entry(TransactionLogEntry("to", 200))
+    log.add_transaction(Transaction("from", "to", 123.45))
 
-    assert 2 == len(log.log)
+    assert 4 == len(log.log)
 
     expected_credit = TransactionLogEntry("from", -123.45)
     expected_debit = TransactionLogEntry("to", 123.45)
@@ -39,7 +40,7 @@ def test_recognises_credit_and_debit_transactions():
     assert expected_debit in log.log
     assert expected_credit in log.log
 
-def test_aggregates_balances_across_accounts():
+def test_aggregates_balances_within_accounts():
     log = TransactionLog()
 
     log.add_log_entry(TransactionLogEntry("from", 500))
@@ -53,7 +54,7 @@ def test_aggregates_balances_across_accounts():
     assert Account("from", 500 - 123.45 + 67.89) in result
     assert Account("to", 600 + 123.45 - 67.89) in result
 
-def test_fails_if_insufficient_funds():
+def test_cannot_add_transaction_if_insufficient_funds():
     log = TransactionLog()
     transaction = Transaction("from", "to", 123.45)
 
