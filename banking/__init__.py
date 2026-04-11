@@ -1,4 +1,4 @@
-from .account import Account
+from .account import Account, AccountList
 from .transaction import Transaction
 from .transaction_log import TransactionLogEntry, TransactionLog
 
@@ -9,7 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 def apply_transactions(accounts: List[dict[str, int]], transactions: List[dict[str, int]]) -> List[Account]:
-    opening_balances = seed_balances(accounts)
+    opening_balances = AccountList()
+    opening_balances.add_accounts(accounts)
+
     transaction_log = record_transactions(convert_transactions(transactions), opening_balances)
     closing_balances = transaction_log.aggregate()
 
@@ -23,20 +25,12 @@ def convert_transactions(transactions: List[dict[str, int]]) -> List[Transaction
 
 
 def record_transactions(transactions: List[Transaction],
-                        opening_balances: List[Account]) -> TransactionLog:
+                        accounts: AccountList) -> TransactionLog:
     transaction_log: TransactionLog = TransactionLog()
-    for balance in opening_balances:
-        transaction_log.add_log_entry(TransactionLogEntry(balance.account_number, balance.balance))
+    for account in accounts.accounts:
+        transaction_log.add_log_entry(TransactionLogEntry(account.account_number, account.balance))
 
     for transaction in transactions:
         transaction_log.add_transaction(transaction)
 
     return transaction_log
-
-
-def seed_balances(balances: List[dict[str, int]]) -> List[Account]:
-    new_balances: List[Account] = []
-    for balance in balances:
-        new_balances.append(Account(balance['account_number'], float(balance['balance'])))
-
-    return new_balances
