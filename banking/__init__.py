@@ -8,11 +8,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def apply_transactions(balances: List[dict[str, str]], transactions: List[dict[str, str]]) -> List[Account]:
-    opening_balances = seed_balances(balances)
+def apply_transactions(accounts: List[dict[str, str]], transactions: List[dict[str, str]]) -> List[Account]:
+    opening_balances = seed_balances(accounts)
     transaction_log = record_transactions(convert_transactions(transactions), opening_balances)
-
-    # logger.info(pformat(transaction_log))
     closing_balances = transaction_log.aggregate()
 
     logger.debug(pformat(closing_balances))
