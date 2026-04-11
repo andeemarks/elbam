@@ -1,6 +1,7 @@
 from typing import List
 from banking import apply_transactions
 from banking.account import Account
+from pprint import pformat
 
 import sys
 import csv
@@ -14,7 +15,7 @@ def main() -> int:
     balances_file = sys.argv[1] if len(sys.argv) > 1 else "./mable_account_balances.csv"
     transactions_file = sys.argv[2] if len(sys.argv) > 2 else "./mable_transactions.csv"
 
-    logger.info(_run(balances_file, transactions_file))
+    logger.info(pformat(_run(balances_file, transactions_file)))
 
     return 0
 
