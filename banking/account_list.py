@@ -12,8 +12,7 @@ class AccountList:
     accounts: List[Account] = field(default_factory=list)  # type: ignore
 
     def add_accounts(self, accounts: List[dict[str, int]]) -> AccountList:
-        for account in accounts:
-            self.accounts.append(Account(account['account_number'], float(account['balance'])))
+        [self.accounts.append(Account(a['account_number'], float(a['balance']))) for a in accounts]
 
         return self
 
@@ -26,10 +25,7 @@ class AccountList:
 
     def _record_transactions(self, transactions: List[Transaction]) -> TransactionLog:
         transaction_log: TransactionLog = TransactionLog()
-        for account in self.accounts:
-            transaction_log.add_log_entry(TransactionLogEntry(account.account_number, account.balance))
-
-        for transaction in transactions:
-            transaction_log.add_transaction(transaction)
+        [transaction_log.add_log_entry(TransactionLogEntry(a.account_number, a.balance)) for a in self.accounts]
+        [transaction_log.add_transaction(transaction) for transaction in transactions]
 
         return transaction_log
