@@ -1,14 +1,4 @@
-from dataclasses import dataclass, field
-from typing import List
-
-
-@dataclass
-class AccountList:
-    accounts: List[Account] = field(default_factory=list)  # type: ignore
-
-    def add_accounts(self, balances: List[dict[str, int]]) -> None:
-        for balance in balances:
-            self.accounts.append(Account(balance['account_number'], float(balance['balance'])))
+from dataclasses import dataclass
 
 
 @dataclass
