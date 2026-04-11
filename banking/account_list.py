@@ -11,17 +11,18 @@ from banking.transaction_log import TransactionLog, TransactionLogEntry
 class AccountList:
     accounts: List[Account] = field(default_factory=list)  # type: ignore
 
-    def add_accounts(self, accounts: List[dict[str, int]]) -> None:
+    def add_accounts(self, accounts: List[dict[str, int]]) -> AccountList:
         for account in accounts:
             self.accounts.append(Account(account['account_number'], float(account['balance'])))
 
-    def add_account(self, account: Account) -> None:
-        self.accounts.append(account)
+        return self
 
-    def apply_transactions(self, transactions: List[Transaction]) -> None:
+    def apply(self, transactions: List[Transaction]) -> AccountList:
         transaction_log = self._record_transactions(transactions)
 
         self.accounts = transaction_log.aggregate()
+
+        return self
 
     def _record_transactions(self, transactions: List[Transaction]) -> TransactionLog:
         transaction_log: TransactionLog = TransactionLog()
