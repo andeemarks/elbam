@@ -1,10 +1,6 @@
 import csv
-import logging
-from typing import List
 
 from banking.account import Account
-logger = logging.getLogger(__name__)
-
 import banking
 
 def test_full_transactions_happy_path():
@@ -14,7 +10,7 @@ def test_full_transactions_happy_path():
     updated_accounts = banking.apply_transactions(accounts, transactions)
 
     closing_accounts = csv_to_dict_list("./tests/mable_account_balances_expected.csv", ['account_number', 'balance'])
-    expected_accounts = [Account(**account) for account in closing_accounts]
+    expected_accounts = [Account(**account) for account in closing_accounts] # type: ignore
     
     assert sorted(updated_accounts, key=lambda b: b.account_number) == sorted(expected_accounts, key=lambda b: b.account_number)
 
