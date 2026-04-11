@@ -8,7 +8,10 @@ logger = logging.getLogger(__name__)
 
 
 def apply_transactions(opening_accounts: List[dict[str, int]], transactions: List[dict[str, int]]) -> List[Account]:
-    accounts = AccountList().add_accounts(opening_accounts).apply(convert_transactions(transactions))
+    accounts = AccountList()
+    accounts.add_accounts(opening_accounts)
+
+    accounts.apply(convert_transactions(transactions))
 
     return accounts.accounts
 

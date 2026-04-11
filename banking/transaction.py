@@ -16,3 +16,6 @@ class Transaction:
 
         if self.from_account_number == self.to_account_number:
             raise ValueError(f"Invalid duplicate account numbers of {self.from_account_number}")
+
+    def __repr__(self):
+        return f"{int(self.from_account_number)} -> {int(self.to_account_number)}: {self.amount}"
