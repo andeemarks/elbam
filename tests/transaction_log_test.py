@@ -13,14 +13,14 @@ def test_empty_on_creation():
 
 def test_contains_log_entries():
     log = TransactionLog()
-    log_entry = TransactionLogEntry("1111234522226789", 124.56)
+    log_entry = TransactionLogEntry(1111234522226789, 124.56)
 
     log.add_log_entry(log_entry)
 
     assert 1 == len(log.log)
     assert log.log[0] == log_entry
 
-    log_entry = TransactionLogEntry("1111234522221234", 567.89)
+    log_entry = TransactionLogEntry(1111234522221234, 567.89)
 
     log.add_log_entry(log_entry)
 
