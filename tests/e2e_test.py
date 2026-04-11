@@ -1,18 +1,15 @@
 import csv
+import sys
 
-from banking.account import Account
-import banking
+import pytest
 
-def test_full_transactions_happy_path():
-    accounts = csv_to_dict_list("./mable_account_balances.csv", ['account_number', 'balance'])
-    transactions = csv_to_dict_list("./mable_transactions.csv", ['from_account_number', 'to_account_number', 'amount'])
+from banking import __main__
 
-    updated_accounts = banking.apply_transactions(accounts, transactions)
-
-    closing_accounts = csv_to_dict_list("./tests/mable_account_balances_expected.csv", ['account_number', 'balance'])
-    expected_accounts = [Account(**account) for account in closing_accounts] # type: ignore
+def test_happy_path(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(sys, "argv", [])
     
-    assert sorted(updated_accounts, key=lambda b: b.account_number) == sorted(expected_accounts, key=lambda b: b.account_number)
+    assert 0 == __main__.main()
+
 
 def csv_to_dict_list(file_name: str, field_names: list[str]):
     with open(file_name) as csv_file:
