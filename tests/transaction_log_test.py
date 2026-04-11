@@ -15,14 +15,14 @@ def test_contains_log_entries():
     log = TransactionLog()
     log_entry = TransactionLogEntry(1111234522226789, 124.56)
 
-    log.add_log_entry(log_entry)
+    log.add_account(log_entry)
 
     assert 1 == len(log.log)
     assert log.log[0] == log_entry
 
     log_entry = TransactionLogEntry(1111234522221234, 567.89)
 
-    log.add_log_entry(log_entry)
+    log.add_account(log_entry)
 
     assert 2 == len(log.log)
     assert log.log[1] == log_entry
@@ -31,8 +31,8 @@ def test_contains_log_entries():
 def test_splits_transaction_into_credit_and_debit():
     log = TransactionLog()
 
-    log.add_log_entry(TransactionLogEntry(1111234522226789, 200))
-    log.add_log_entry(TransactionLogEntry(1111234522221234, 200))
+    log.add_account(TransactionLogEntry(1111234522226789, 200))
+    log.add_account(TransactionLogEntry(1111234522221234, 200))
     log.add_transaction(Transaction(1111234522226789, 1111234522221234, 123.45))
 
     assert 4 == len(log.log)
@@ -47,8 +47,8 @@ def test_splits_transaction_into_credit_and_debit():
 def test_reconciles_balances_within_accounts():
     log = TransactionLog()
 
-    log.add_log_entry(TransactionLogEntry(1111234522226789, 500))
-    log.add_log_entry(TransactionLogEntry(1111234522221234, 600))
+    log.add_account(TransactionLogEntry(1111234522226789, 500))
+    log.add_account(TransactionLogEntry(1111234522221234, 600))
     log.add_transaction(Transaction(1111234522226789, 1111234522221234, 123.45))
     log.add_transaction(Transaction(1111234522221234, 1111234522226789, 67.89))
 

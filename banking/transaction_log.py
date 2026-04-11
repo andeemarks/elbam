@@ -14,12 +14,12 @@ class TransactionLogEntry:
 class TransactionLog:
     log: list[TransactionLogEntry] = field(default_factory=list)  # type: ignore
 
-    def add_log_entry(self, log_entry: TransactionLogEntry):
+    def add_account(self, log_entry: TransactionLogEntry):
         self.log.append(log_entry)
 
     def add_transaction(self, transaction: Transaction):
-        self.add_log_entry(TransactionLogEntry(transaction.from_account_number, -transaction.amount))
-        self.add_log_entry(TransactionLogEntry(transaction.to_account_number, transaction.amount))
+        self.add_account(TransactionLogEntry(transaction.from_account_number, -transaction.amount))
+        self.add_account(TransactionLogEntry(transaction.to_account_number, transaction.amount))
 
         self.reconcile()
 
