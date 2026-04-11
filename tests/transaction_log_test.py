@@ -44,7 +44,7 @@ def test_splits_transaction_into_credit_and_debit():
     assert expected_credit in log.log
 
 
-def test_aggregate_consolidates_balances_within_accounts():
+def test_reconciles_balances_within_accounts():
     log = TransactionLog()
 
     log.add_log_entry(TransactionLogEntry(1111234522226789, 500))
@@ -52,7 +52,7 @@ def test_aggregate_consolidates_balances_within_accounts():
     log.add_transaction(Transaction(1111234522226789, 1111234522221234, 123.45))
     log.add_transaction(Transaction(1111234522221234, 1111234522226789, 67.89))
 
-    result = log.aggregate()
+    result = log.reconcile()
 
     assert 2 == len(result)
     assert Account(1111234522226789, 500 - 123.45 + 67.89) in result
