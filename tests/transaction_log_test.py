@@ -40,7 +40,7 @@ def test_splits_transaction_into_credit_and_debit():
     assert expected_debit in log.log
     assert expected_credit in log.log
 
-def test_aggregates_balances_within_accounts():
+def test_aggregate_consolidates_balances_within_accounts():
     log = TransactionLog()
 
     log.add_log_entry(TransactionLogEntry("from", 500))
