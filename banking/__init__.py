@@ -42,13 +42,9 @@ def record_transactions(transactions: List[Transaction],
         transaction_log.append(TransactionLog(balance.account_number, balance.balance))
 
     for transaction in transactions:
-        from_account_number = transaction.from_account_number
-        to_account_number = transaction.to_account_number
-        amount = transaction.amount
-        from_account = next((b for b in opening_balances if b.account_number == from_account_number))
-        to_account = next((b for b in opening_balances if b.account_number == to_account_number))
-        transaction_log.append(TransactionLog(from_account.account_number, -amount))
-        transaction_log.append(TransactionLog(to_account.account_number, amount))
+        (debit, credit) = TransactionLog.from_transaction(transaction)
+        transaction_log.append(debit)
+        transaction_log.append(credit)
 
     return transaction_log
 
