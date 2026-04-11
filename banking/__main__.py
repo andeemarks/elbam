@@ -8,7 +8,7 @@ import csv
 import logging
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(name)s - %(levelname)s - %(message)s")
 
 
 def main() -> int:
@@ -24,11 +24,11 @@ def main() -> int:
 
 
 def _run(balances_file: str, transactions_file: str) -> List[Account]:
-    balances = _csv_to_dict_list(balances_file, ['account_number', 'balance'])
+    balances = _csv_to_dict_list(balances_file, ["account_number", "balance"])
     logger.info("OPENING BALANCES")
     logger.info(pformat(balances))
 
-    transactions = _csv_to_dict_list(transactions_file, ['from_account_number', 'to_account_number', 'amount'])
+    transactions = _csv_to_dict_list(transactions_file, ["from_account_number", "to_account_number", "amount"])
     logger.info("TRANSACTIONS")
     logger.info(pformat(transactions))
 
@@ -43,5 +43,5 @@ def _csv_to_dict_list(file_name: str, field_names: list[str]) -> list[dict[str, 
     return result  # type: ignore
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
