@@ -1,5 +1,6 @@
 import csv
 import logging
+from typing import List
 
 from banking.account import Account
 logger = logging.getLogger(__name__)
@@ -7,22 +8,19 @@ logger = logging.getLogger(__name__)
 import banking
 
 def test_full_transactions_happy_path():
-    with open("./mable_account_balances.csv") as initial_accounts_file:
-        fieldnames = ['account_number', 'balance']
-        reader = csv.DictReader(initial_accounts_file, fieldnames=fieldnames, skipinitialspace=True, quoting=csv.QUOTE_NONNUMERIC)
-        accounts = [row for row in reader]
+    accounts = csv_to_dict_list("./mable_account_balances.csv", ['account_number', 'balance'])
+    transactions = csv_to_dict_list("./mable_transactions.csv", ['from_account_number', 'to_account_number', 'amount'])
 
-    with open("./mable_transactions.csv") as tx_file:
-        fieldnames = ['from_account_number', 'to_account_number', 'amount']
-        reader = csv.DictReader(tx_file, fieldnames=fieldnames, skipinitialspace=True, quoting=csv.QUOTE_NONNUMERIC)
-        transactions = [row for row in reader]
+    updated_accounts = banking.apply_transactions(accounts, transactions)
 
-    updated_accounts = banking.apply_transactions(accounts, transactions) # type: ignore
-
-    with open("./tests/mable_account_balances_expected.csv") as closing_balances_file:
-        fieldnames = ['account_number', 'balance']
-        reader = csv.DictReader(closing_balances_file, fieldnames=fieldnames, skipinitialspace=True, quoting=csv.QUOTE_NONNUMERIC)
-        closing_accounts = [row for row in reader]
-        expected_accounts = [Account(**account) for account in closing_accounts]
+    closing_accounts = csv_to_dict_list("./tests/mable_account_balances_expected.csv", ['account_number', 'balance'])
+    expected_accounts = [Account(**account) for account in closing_accounts]
     
     assert sorted(updated_accounts, key=lambda b: b.account_number) == sorted(expected_accounts, key=lambda b: b.account_number)
+
+def csv_to_dict_list(file_name: str, field_names: list[str]):
+    with open(file_name) as csv_file:
+        reader = csv.DictReader(csv_file, fieldnames=field_names, skipinitialspace=True, quoting=csv.QUOTE_NONNUMERIC)
+        result = [row for row in reader]
+
+    return result
