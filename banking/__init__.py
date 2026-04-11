@@ -1,6 +1,6 @@
 from .account import Account
 from .transaction import Transaction
-from .transaction_log import TransactionLog
+from .transaction_log import TransactionLogEntry
 
 from pprint import pformat
 from itertools import groupby
@@ -26,7 +26,7 @@ def convert_transactions(transactions: List[dict[str, str]]) -> List[Transaction
     return [Transaction(**transaction) for transaction in transactions]
 
 
-def aggregate_transactions_across_accounts(transaction_log: List[TransactionLog]) -> List[Account]:
+def aggregate_transactions_across_accounts(transaction_log: List[TransactionLogEntry]) -> List[Account]:
     combined_new_balances: List[Account] = []
     for account_number, balance in groupby(transaction_log, key=lambda account: account.account_number):
         total_balance = sum(b.balance for b in balance)
@@ -36,13 +36,13 @@ def aggregate_transactions_across_accounts(transaction_log: List[TransactionLog]
 
 
 def record_transactions(transactions: List[Transaction],
-                        opening_balances: List[Account]) -> List[TransactionLog]:
-    transaction_log: List[TransactionLog] = []
+                        opening_balances: List[Account]) -> List[TransactionLogEntry]:
+    transaction_log: List[TransactionLogEntry] = []
     for balance in opening_balances:
-        transaction_log.append(TransactionLog(balance.account_number, balance.balance))
+        transaction_log.append(TransactionLogEntry(balance.account_number, balance.balance))
 
     for transaction in transactions:
-        (debit, credit) = TransactionLog.from_transaction(transaction)
+        (debit, credit) = TransactionLogEntry.from_transaction(transaction)
         transaction_log.append(debit)
         transaction_log.append(credit)
 
