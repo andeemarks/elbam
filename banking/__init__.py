@@ -7,13 +7,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def apply_transactions(accounts: List[dict[str, int]], transactions: List[dict[str, int]]) -> List[Account]:
-    opening_balances = AccountList()
-    opening_balances.add_accounts(accounts)
+def apply_transactions(opening_accounts: List[dict[str, int]], transactions: List[dict[str, int]]) -> List[Account]:
+    accounts = AccountList()
+    accounts.add_accounts(opening_accounts)
+    accounts.apply_transactions(convert_transactions(transactions))
 
-    closing_balances = opening_balances.apply_transactions(convert_transactions(transactions))
-
-    return closing_balances
+    return accounts.accounts
 
 
 def convert_transactions(transactions: List[dict[str, int]]) -> List[Transaction]:

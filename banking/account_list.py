@@ -15,10 +15,13 @@ class AccountList:
         for account in accounts:
             self.accounts.append(Account(account['account_number'], float(account['balance'])))
 
-    def apply_transactions(self, transactions: List[Transaction]) -> List[Account]:
+    def add_account(self, account: Account) -> None:
+        self.accounts.append(account)
+
+    def apply_transactions(self, transactions: List[Transaction]) -> None:
         transaction_log = self._record_transactions(transactions)
 
-        return transaction_log.aggregate()
+        self.accounts = transaction_log.aggregate()
 
     def _record_transactions(self, transactions: List[Transaction]) -> TransactionLog:
         transaction_log: TransactionLog = TransactionLog()
