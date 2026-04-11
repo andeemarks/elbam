@@ -8,12 +8,11 @@ from banking.transaction_log import TransactionLog, TransactionLogEntry
 
 @dataclass
 class TransactionProcessor:
+    raw_accounts: List[dict[str, int]] = field(default_factory=list)  # type: ignore
     accounts: List[Account] = field(default_factory=list)  # type: ignore
 
-    def add_accounts(self, accounts: List[dict[str, int]]) -> TransactionProcessor:
-        [self.accounts.append(Account(a["account_number"], float(a["balance"]))) for a in accounts]
-
-        return self
+    def __post_init__(self):
+        [self.accounts.append(Account(a["account_number"], float(a["balance"]))) for a in self.raw_accounts]
 
     def apply(self, transactions: List[Transaction]) -> TransactionProcessor:
         transaction_log = self._record_transactions(transactions)
