@@ -18,8 +18,8 @@ class TransactionLog:
         self.log.append(log_entry)
 
     def add_transaction(self, transaction: Transaction):
-        self.log.append(TransactionLogEntry(transaction.from_account_number, -transaction.amount))
-        self.log.append(TransactionLogEntry(transaction.to_account_number, transaction.amount))
+        self.add_log_entry(TransactionLogEntry(transaction.from_account_number, -transaction.amount))
+        self.add_log_entry(TransactionLogEntry(transaction.to_account_number, transaction.amount))
 
         self.aggregate()
 
