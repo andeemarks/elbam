@@ -6,7 +6,7 @@ from .account import Account
 
 @dataclass
 class TransactionLogEntry:
-    account_number: str
+    account_number: int
     balance: float
 
 
