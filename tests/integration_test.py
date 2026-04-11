@@ -8,7 +8,7 @@ def test_full_transactions_happy_path():
     accounts = csv_to_dict_list("./mable_account_balances.csv", ["account_number", "balance"])
     transactions = csv_to_dict_list("./mable_transactions.csv", ["from_account_number", "to_account_number", "amount"])
 
-    updated_accounts = banking.apply_transactions(accounts, transactions)
+    updated_accounts = banking.apply_transactions(accounts, transactions)  # type: ignore
 
     closing_accounts = csv_to_dict_list("./tests/mable_account_balances_expected.csv", ["account_number", "balance"])
     expected_accounts = [Account(**account) for account in closing_accounts]  # type: ignore
