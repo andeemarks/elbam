@@ -2,6 +2,8 @@ from banking.account import Account
 from banking.transaction import Transaction
 from banking.transaction_log import TransactionLog, TransactionLogEntry
 
+import pytest
+
 def test_empty_on_creation():
     log = TransactionLog()
 
@@ -50,3 +52,10 @@ def test_aggregates_balances_across_accounts():
     assert 2 == len(result)
     assert Account("from", 500 - 123.45 + 67.89) in result
     assert Account("to", 600 + 123.45 - 67.89) in result
+
+def test_fails_if_insufficient_funds():
+    log = TransactionLog()
+    transaction = Transaction("from", "to", 123.45)
+
+    with pytest.raises(ValueError):  # type: ignore
+        log.add_transaction(transaction)
