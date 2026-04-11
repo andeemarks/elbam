@@ -19,7 +19,7 @@ def apply_transactions(accounts: List[dict[str, str]], transactions: List[dict[s
 
 
 def convert_transactions(transactions: List[dict[str, str]]) -> List[Transaction]:
-    return [Transaction(**transaction) for transaction in transactions]
+    return [Transaction(**transaction) for transaction in transactions]  # type: ignore
 
 
 def record_transactions(transactions: List[Transaction],

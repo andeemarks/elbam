@@ -12,7 +12,7 @@ class TransactionLogEntry:
 
 @dataclass
 class TransactionLog:
-    log: list[TransactionLogEntry] = field(default_factory=list)
+    log: list[TransactionLogEntry] = field(default_factory=list)  # type: ignore
 
     def add_log_entry(self, log_entry: TransactionLogEntry):
         self.log.append(log_entry)
